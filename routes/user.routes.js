@@ -2,6 +2,7 @@ const express = require("express");
 const { UserModel } = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const userRouter = express.Router();
 
@@ -31,14 +32,18 @@ userRouter.post("/register", async (req, res) => {
 
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  let option ={
-    expiresIn:"3m"
-  }
+  let option = {
+    expiresIn: "3m",
+  };
 
   try {
     let data = await UserModel.find({ email });
     if (data.length > 0) {
-      let token = jwt.sign({ userId: data[0]._id }, "saurabh",option);
+      let token = jwt.sign(
+        { userId: data[0]._id },
+        process.env.SECRET_KEY,
+        option
+      );
       bcrypt.compare(password, data[0].password, function (err, result) {
         if (err)
           return res.send({ message: "Somthing went wrong:" + err, status: 0 });

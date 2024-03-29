@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { authenticator } = require("../middlewares/authenticator");
 const { NoteModel } = require("../models/NoteModel");
@@ -10,7 +11,7 @@ noteRouter.use(authenticator);
 
 noteRouter.get("/",async(req,res)=>{
     let token = req.headers.authorization
-    jwt.verify(token,"hamthy",async(err,decode)=>{
+    jwt.verify(token,process.env.SECRET_KEY,async(err,decode)=>{
         try {
 
             let data = await NoteModel.find({user:decode.userId})
