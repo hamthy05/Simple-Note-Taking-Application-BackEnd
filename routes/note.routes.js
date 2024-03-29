@@ -10,7 +10,7 @@ noteRouter.use(authenticator);
 
 noteRouter.get("/",async(req,res)=>{
     let token = req.headers.authorization
-    jwt.verify(token,"saurabh",async(err,decode)=>{
+    jwt.verify(token,"hamthy",async(err,decode)=>{
         try {
 
             let data = await NoteModel.find({user:decode.userId})
@@ -61,7 +61,7 @@ noteRouter.patch("/",async(req,res)=>{
     try {
         await NoteModel.findByIdAndUpdate({_id:id},req.body)
         res.send({
-            message:"Note updated",
+            message:"Note Edited",
             status:1
         })
     } catch (error) {
